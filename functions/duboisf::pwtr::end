@@ -1,0 +1,60 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+local _type current_bg element next_bg=NONE prompt_morsel tmp_prompt value
+local -i index=1
+
+find_next_bg() {
+    local element
+    next_bg=NONE
+    # we want the next bg in the prompt elements, so
+    # start at the current index + 1
+    for element in ${duboisf_pwtr_prompt_elements:$index}; do
+        case $element in
+            bg=*)
+                # strip bg= from elements
+                next_bg=${element#*=}
+                return 0
+                ;;
+        esac
+    done
+}
+
+for element in $duboisf_pwtr_prompt_elements; do
+    _type=${element%%=*}
+    value=${element#*=}
+    case $_type in
+        divider)
+            case $value in
+                # powerline hard divider
+                hard)
+                    find_next_bg
+                    prompt_morsel="%F{$current_bg}%K{$next_bg}\ue0b0"
+                    ;;
+                # powerline soft divider
+                soft) prompt_morsel="\ue0b1";;
+            esac
+            ;;
+        text)
+            prompt_morsel=$value
+            ;;
+        fg)
+            prompt_morsel="%F{$value}"
+            ;;
+        bg)
+            current_bg=$value
+            prompt_morsel="%K{$value}"
+            ;;
+    esac
+    if [[ -z $prompt_morsel ]]; then
+        print -u2 "$0: unknown element: $element"
+    fi
+    tmp_prompt="$tmp_prompt$prompt_morsel"
+    ((index++))
+done
+
+tmp_prompt="$tmp_prompt%f%k"
+unfunction find_next_bg
+duboisf_pwtr_prompt_elements=()
+
+prompt=$(print -n $tmp_prompt)

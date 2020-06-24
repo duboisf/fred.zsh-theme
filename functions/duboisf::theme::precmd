@@ -1,0 +1,12 @@
+emulate -RL zsh
+setopt err_return
+
+duboisf::pwtr::start
+duboisf::theme::dir
+duboisf::pwtr::color::bg NONE
+duboisf::pwtr::text '\n'
+duboisf::theme::terminal
+duboisf::pwtr::text ' '
+duboisf::pwtr::end
+
+# vim: ft=zsh

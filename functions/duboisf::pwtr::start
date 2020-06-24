@@ -1,0 +1,4 @@
+emulate -R zsh
+setopt warn_create_global
+
+typeset -ga duboisf_pwtr_prompt_elements=()

@@ -1,0 +1,11 @@
+emulate -RL zsh
+setopt warn_create_global
+
+if (( $# != 1 )); then
+    print -u 2 "USAGE: $0 TEXT"
+    return 1
+fi
+
+duboisf_pwtr_prompt_elements+="text=$1"
+
+# vim: filetype=zsh

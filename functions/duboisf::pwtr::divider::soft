@@ -1,0 +1,11 @@
+emulate -RL zsh
+setopt warn_create_global
+
+if (( $# != 0 )); then
+    print -u 2 "USAGE: $0 (no args)"
+    return 1
+fi
+
+duboisf_pwtr_prompt_elements+="divider=soft"
+
+# vim: filetype=zsh

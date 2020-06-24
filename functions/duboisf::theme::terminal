@@ -1,0 +1,9 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+duboisf::pwtr::color::fg black
+duboisf::pwtr::color::bg magenta
+duboisf::pwtr::text ' \uf120 '
+duboisf::pwtr::divider::hard
+
+# vim: ft=zsh

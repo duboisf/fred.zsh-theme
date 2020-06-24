@@ -1,0 +1,41 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+duboisf::pwtr::color::fg black
+duboisf::pwtr::color::bg blue
+duboisf::pwtr::text ' \ue613 ' # folder icon
+duboisf::pwtr::divider::hard
+
+local -a cwd_folders=(${(s|/|)${(%):-%~}})
+local -r folder_fg=blue
+local built_path cwd_folder
+
+[[ ${cwd_folders[1]} != '~' ]] && built_path+=/
+
+duboisf::pwtr::color::fg $folder_fg
+duboisf::pwtr::color::bg black
+while (( $#cwd_folders > 0 )); do
+    cwd_folder=$cwd_folders[1]
+    cwd_folders=(${cwd_folders:1}) # pop head
+    built_path="${built_path}${cwd_folder}/"
+    duboisf::pwtr::text " $cwd_folder "
+    if [[ -r ${~built_path}.git/index ]]; then
+        if (( $+commands[git] )); then
+            local git_fg=green
+            if ! command git diff --quiet --ignore-submodules; then
+                git_fg=yellow
+            fi
+            duboisf::pwtr::color::fg $git_fg
+            local branch=$(command git rev-parse --abbrev-ref HEAD)
+            duboisf::pwtr::text "\uf6dc \uf418 $branch "
+            # dont' forget to reset the color
+            duboisf::pwtr::color::fg $folder_fg
+        fi
+    fi
+    if (( $#cwd_folders > 0 )); then
+        # more folders yet to come
+        duboisf::pwtr::divider::soft
+    fi
+done
+# done, add hard divider
+duboisf::pwtr::divider::hard
