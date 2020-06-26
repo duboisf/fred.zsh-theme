@@ -39,3 +39,5 @@ while (( $#cwd_folders > 0 )); do
 done
 # done, add hard divider
 duboisf::pwtr::divider::hard
+
+# vim: ft=zsh

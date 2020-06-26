@@ -58,3 +58,5 @@ unfunction find_next_bg
 duboisf_pwtr_prompt_elements=()
 
 prompt=$(print -n $tmp_prompt)
+
+# vim: ft=zsh
