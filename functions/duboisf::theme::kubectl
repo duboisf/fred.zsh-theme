@@ -1,0 +1,34 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+# If kubectl isn't available, skip
+(( $+commands[kubectl] )) || return
+
+# If the current context is 'off', skip
+[[ $(kubectl config current-context) == off ]] && return
+
+local orange='#d26d26'
+local wheel_of_dharma='\u2638'
+
+duboisf::pwtr::color::fg black
+duboisf::pwtr::color::bg $orange
+duboisf::pwtr::text " $wheel_of_dharma "
+duboisf::pwtr::divider::hard
+
+duboisf::pwtr::color::fg $orange
+duboisf::pwtr::color::bg black
+
+local full_ctx=$(kubectl config view --minify -o jsonpath='{.contexts[0].context.cluster}/{.contexts[0].context.namespace}')
+local kube_ctx="${full_ctx%/*}"
+local kube_ns="${full_ctx#*/}"
+if [[ -n $kube_ctx ]]; then
+    duboisf::pwtr::text " $kube_ctx "
+    if [[ -n $kube_ns ]]; then
+        duboisf::pwtr::divider::soft
+        duboisf::pwtr::text " $kube_ns "
+    fi
+fi
+
+duboisf::pwtr::divider::hard
+
+# vim: ft=zsh

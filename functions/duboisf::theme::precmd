@@ -3,6 +3,7 @@ setopt err_return
 
 duboisf::pwtr::start
 duboisf::theme::dir
+duboisf::theme::kubectl
 duboisf::pwtr::color::bg NONE
 duboisf::pwtr::text '\n'
 duboisf::theme::terminal
