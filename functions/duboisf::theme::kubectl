@@ -4,8 +4,15 @@ setopt err_return warn_create_global
 # If kubectl isn't available, skip
 (( $+commands[kubectl] )) || return
 
-# If the current context is 'off', skip
-[[ $(kubectl config current-context) == off ]] && return
+local kubecfg=$HOME/.kube/config
+if [[ -n KUBECONFIG ]]; then
+    local kubecfg=${KUBECONFIG%:*}
+fi
+
+# Skip this prompt if the current kubectl context is "off"
+if fgrep -q 'current-context: "off"' $kubecfg; then
+    return
+fi
 
 local full_ctx=$(kubectl config view --minify \
     -o jsonpath='{.contexts[0].context.cluster}/{.contexts[0].context.namespace}' \
