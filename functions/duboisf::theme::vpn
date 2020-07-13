@@ -1,0 +1,29 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+# skip if we are missing the ip or jq command
+(( $+commands[ip] && $+commands[jq] )) || return
+
+local netns iface ifaces lock_icon
+local netnss=($(ip -json netns list | jq '.[].name' -r))
+for netns in $netnss; do
+    ifaces=$(ip -json link list | jq --arg netns $netns -r '.[].ifname | select(startswith($netns))')
+    for iface in $ifaces; do
+        local lock_icon=
+        case $iface in
+            *-in) lock_icon='🔒';;
+            *-out) lock_icon='🔓';;
+            *) break;;
+        esac
+        duboisf::pwtr::color::fg black
+        duboisf::pwtr::color::bg red
+        duboisf::pwtr::text " $lock_icon"
+        duboisf::pwtr::divider::hard
+        duboisf::pwtr::color::fg red
+        duboisf::pwtr::color::bg black
+        duboisf::pwtr::text " $netns "
+        duboisf::pwtr::divider::hard
+    done
+done
+
+# vim: ft=zsh

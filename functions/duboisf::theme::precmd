@@ -6,6 +6,7 @@ duboisf::theme::dir
 duboisf::theme::kubectl
 duboisf::pwtr::color::bg NONE
 duboisf::pwtr::text '\n'
+duboisf::theme::vpn
 duboisf::theme::terminal
 duboisf::pwtr::text ' '
 duboisf::pwtr::end
