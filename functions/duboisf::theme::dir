@@ -25,8 +25,12 @@ while (( $#cwd_folders > 0 )); do
             if ! command git diff --quiet --ignore-submodules; then
                 git_fg=yellow
             fi
+            local branch=$(command git rev-parse --abbrev-ref HEAD 2> /dev/null)
+            if [[ $branch == HEAD ]]; then
+                branch='!\uf417' # no commit yet
+                git_fg=yellow
+            fi
             duboisf::pwtr::color::fg $git_fg
-            local branch=$(command git rev-parse --abbrev-ref HEAD)
             duboisf::pwtr::text "\uf6dc \uf418 $branch "
             # dont' forget to reset the color
             duboisf::pwtr::color::fg $folder_fg
