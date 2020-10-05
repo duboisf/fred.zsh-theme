@@ -5,7 +5,7 @@ setopt err_return warn_create_global
 (( $+commands[kubectl] )) || return
 
 local kubecfg=$HOME/.kube/config
-if [[ -n KUBECONFIG ]]; then
+if [[ -n $KUBECONFIG ]]; then
     local kubecfg=${KUBECONFIG%:*}
 fi
 
