@@ -15,7 +15,7 @@ if fgrep -q 'current-context: "off"' $kubecfg; then
 fi
 
 local full_ctx=$(kubectl config view --minify \
-    -o jsonpath='{.contexts[0].context.cluster}/{.contexts[0].context.namespace}' \
+    -o jsonpath='{.contexts[0].name}/{.contexts[0].context.namespace}' \
     2> /dev/null)
 
 # If the current context doesn't exist, skip
