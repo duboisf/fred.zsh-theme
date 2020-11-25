@@ -12,20 +12,27 @@ local built_path cwd_folder
 
 [[ ${cwd_folders[1]} != '~' ]] && built_path+=/
 
-duboisf::pwtr::color::fg $folder_fg
 duboisf::pwtr::color::bg black
 while (( $#cwd_folders > 0 )); do
     cwd_folder=$cwd_folders[1]
     cwd_folders=(${cwd_folders:1}) # pop head
     built_path="${built_path}${cwd_folder}/"
+    if [[ -d ${~built_path} ]]; then
+        duboisf::pwtr::color::fg $folder_fg
+    else
+        duboisf::pwtr::color::fg red
+    fi
     duboisf::pwtr::text " $cwd_folder "
+    duboisf::pwtr::color::fg $folder_fg
     if [[ -r ${~built_path}.git/index ]]; then
         if (( $+commands[git] )); then
             local git_fg=green
-            if ! command git diff --quiet --ignore-submodules; then
+            local absolute_built_path=$(echo ${~built_path})
+            if ! command git -C $absolute_built_path diff --quiet --ignore-submodules; then
+
                 git_fg=yellow
             fi
-            local branch=$(command git rev-parse --abbrev-ref HEAD 2> /dev/null)
+            local branch=$(command git -C $absolute_built_path rev-parse --abbrev-ref HEAD 2> /dev/null)
             if [[ $branch == HEAD ]]; then
                 branch='!\uf417' # no commit yet
                 git_fg=yellow

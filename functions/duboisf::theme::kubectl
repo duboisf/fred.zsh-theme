@@ -10,7 +10,7 @@ if [[ -n $KUBECONFIG ]]; then
 fi
 
 # Skip this prompt if the current kubectl context is "off"
-if fgrep -q 'current-context: "off"' $kubecfg; then
+if (cd /; fgrep -q 'current-context: "off"' $kubecfg); then
     return
 fi
 
