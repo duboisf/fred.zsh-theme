@@ -10,6 +10,7 @@ local -a cwd_folders=(${(s|/|)${(%):-%~}})
 local -r folder_fg=blue
 local built_path cwd_folder
 
+duboisf::pwtr::text " "
 [[ ${cwd_folders[1]} != '~' ]] && built_path+=/
 
 duboisf::pwtr::color::bg black
@@ -22,14 +23,13 @@ while (( $#cwd_folders > 0 )); do
     else
         duboisf::pwtr::color::fg red
     fi
-    duboisf::pwtr::text " $cwd_folder "
+    duboisf::pwtr::text "$cwd_folder"
     duboisf::pwtr::color::fg $folder_fg
-    if [[ -r ${~built_path}.git/index ]]; then
+    if [[ -r ${~built_path}.git ]]; then
         if (( $+commands[git] )); then
             local git_fg=green
             local absolute_built_path=$(echo ${~built_path})
             if ! command git -C $absolute_built_path diff --quiet --ignore-submodules; then
-
                 git_fg=yellow
             fi
             local branch=$(command git -C $absolute_built_path rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -38,14 +38,15 @@ while (( $#cwd_folders > 0 )); do
                 git_fg=yellow
             fi
             duboisf::pwtr::color::fg $git_fg
-            duboisf::pwtr::text "\uf6dc \uf418 $branch "
+            duboisf::pwtr::text " \uf418 $branch "
             # dont' forget to reset the color
             duboisf::pwtr::color::fg $folder_fg
         fi
     fi
     if (( $#cwd_folders > 0 )); then
         # more folders yet to come
-        duboisf::pwtr::divider::soft
+        # duboisf::pwtr::divider::soft
+        duboisf::pwtr::text "/"
     fi
 done
 # done, add hard divider
