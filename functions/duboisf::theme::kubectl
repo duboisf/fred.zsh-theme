@@ -9,6 +9,11 @@ if [[ -n $KUBECONFIG ]]; then
     local kubecfg=${KUBECONFIG%:*}
 fi
 
+# Skip this prompt if the kube config file doesn't exist
+if [[ ! -f $kubecfg ]]; then
+    return
+fi
+
 # Skip this prompt if the current kubectl context is "off"
 if (cd /; fgrep -q 'current-context: none' $kubecfg); then
     return
