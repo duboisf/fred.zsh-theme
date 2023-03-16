@@ -20,14 +20,14 @@ if (cd /; fgrep -q 'current-context: none' $kubecfg); then
 fi
 
 local full_ctx=$(kubectl config view --minify \
-    -o jsonpath='{.contexts[0].name}/{.contexts[0].context.namespace}' \
+    -o jsonpath='{.contexts[0].name}⌽{.contexts[0].context.namespace}' \
     2> /dev/null)
 
 # If the current context doesn't exist, skip
 [[ -z $full_ctx ]] && return
 
-local kube_ctx="${full_ctx%/*}"
-local kube_ns="${full_ctx#*/}"
+local kube_ctx="${full_ctx%⌽*}"
+local kube_ns="${full_ctx#*⌽}"
 
 [[ -z $kube_ctx ]] && return
 
